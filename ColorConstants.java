@@ -1,4 +1,4 @@
-package org.labodoom.anglewyrm;
+package org.anglewyrm.labodoom;
 
 public class ColorConstants {
     // ANSI escape codes for dark red (false)

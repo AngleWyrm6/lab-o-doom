@@ -1,5 +1,5 @@
 // Package declaration
-package org.labodoom.anglewyrm;
+package org.anglewyrm.labodoom;
 
 import java.util.HashMap;
 import java.util.Map;
