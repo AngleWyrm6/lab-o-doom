@@ -12,9 +12,9 @@ import static org.anglewyrm.labodoom.ColorConstants.*;
  */
 public class Judgment {
 
-    private boolean interested;
-    private boolean favored;
-    private boolean confident;
+    private boolean interested;  // Like
+    private boolean favored;     // Agree
+    private boolean confident;   // Sure
 
     private static final int INTEREST_MASK = 0b100; // Check the 3rd bit
     private static final int FAVOR_MASK = 0b010;    // Check the 2nd bit
