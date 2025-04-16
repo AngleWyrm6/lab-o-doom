@@ -1,131 +1,114 @@
 package org.anglewyrm.labodoom;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Arrays;
 import static org.anglewyrm.labodoom.ColorConstants.*;
+import static org.anglewyrm.labodoom.Constants.Component.*; // Static import
 
 public class Attitude {
 
-    private boolean interested;
-    private boolean favored;
-    private boolean confident;
-    private boolean fear;
-    private boolean magnitude;
+    private List<Component> activeComponents;
+    private static final Component[] ALL_COMPONENTS = {INTERESTED, FAVORED, CONFIDENT, FEAR, MAGNITUDE};
 
-    private static final int INTEREST_MASK = 0b10000;
-    private static final int FAVOR_MASK = 0b01000;
-    private static final int CONFIDENCE_MASK = 0b00100;
-    private static final int FEAR_MASK = 0b00010;
-    private static final int MAGNITUDE_MASK = 0b00001;
-
-    private static final Map<Integer, String> ATTITUDE_LABELS = new HashMap<>();
+    private static final Map<List<Component>, String> ATTITUDE_LABELS = new HashMap<>();
 
     static {
-        ATTITUDE_LABELS.put(0b11111, "Passionate Enthusiasm");
-        ATTITUDE_LABELS.put(0b11110, "Eager Excitement");
-        ATTITUDE_LABELS.put(0b11101, "Emboldened Optimism");
-        ATTITUDE_LABELS.put(0b11100, "Lighthearted Hopefulness");
-        ATTITUDE_LABELS.put(0b11011, "Fascinated Admiration");
-        ATTITUDE_LABELS.put(0b11010, "Curious Attraction");
-        ATTITUDE_LABELS.put(0b11001, "Devoted Affection");
-        ATTITUDE_LABELS.put(0b11000, "Comfortable Contentment");
-        ATTITUDE_LABELS.put(0b10111, "Intense Observance");
-        ATTITUDE_LABELS.put(0b10110, "Cautious Interest");
-        ATTITUDE_LABELS.put(0b10101, "Anxious Anticipation");
-        ATTITUDE_LABELS.put(0b10100, "Mild Worry");
-        ATTITUDE_LABELS.put(0b10011, "Investigative Suspicion");
-        ATTITUDE_LABELS.put(0b10010, "Guarded Skepticism");
-        ATTITUDE_LABELS.put(0b10001, "Profound Unease");
-        ATTITUDE_LABELS.put(0b10000, "Quiet Concern");
-        ATTITUDE_LABELS.put(0b01111, "Reluctant Acceptance");
-        ATTITUDE_LABELS.put(0b01110, "Diplomatic Tolerance");
-        ATTITUDE_LABELS.put(0b01101, "Cautious Optimism");
-        ATTITUDE_LABELS.put(0b01100, "Modest Satisfaction");
-        ATTITUDE_LABELS.put(0b01011, "Polite Interest");
-        ATTITUDE_LABELS.put(0b01010, "Casual Acknowledgment");
-        ATTITUDE_LABELS.put(0b01001, "Respectful Deference");
-        ATTITUDE_LABELS.put(0b01000, "Passive Compliance");
-        ATTITUDE_LABELS.put(0b00111, "Petrified Horror");
-        ATTITUDE_LABELS.put(0b00110, "Quiet Dread");
-        ATTITUDE_LABELS.put(0b00101, "Vulnerable Insecurity");
-        ATTITUDE_LABELS.put(0b00100, "Awkward Discomfort");
-        ATTITUDE_LABELS.put(0b00011, "Terrified");
-        ATTITUDE_LABELS.put(0b00010, "Fearful");
-        ATTITUDE_LABELS.put(0b00001, "Profound Resignation");
-        ATTITUDE_LABELS.put(0b00000, "Empty Indifference");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, CONFIDENT, FEAR, MAGNITUDE), "Passionate Enthusiasm");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, CONFIDENT, FEAR), "Eager Excitement");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, CONFIDENT, MAGNITUDE), "Emboldened Optimism");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, CONFIDENT), "Lighthearted Hopefulness");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, FEAR, MAGNITUDE), "Fascinated Admiration");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, FEAR), "Curious Attraction");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED, MAGNITUDE), "Devoted Affection");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FAVORED), "Comfortable Contentment");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, FEAR, MAGNITUDE), "Intense Observance");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, FEAR), "Cautious Interest");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, MAGNITUDE), "Anxious Anticipation");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT), "Mild Worry");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FEAR, MAGNITUDE), "Investigative Suspicion");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FEAR), "Guarded Skepticism");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, MAGNITUDE), "Profound Unease");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED), "Quiet Concern");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, CONFIDENT, FEAR, MAGNITUDE), "Reluctant Acceptance");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, CONFIDENT, FEAR), "Diplomatic Tolerance");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, CONFIDENT, MAGNITUDE), "Cautious Optimism");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, CONFIDENT), "Modest Satisfaction");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, FEAR, MAGNITUDE), "Polite Interest");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, FEAR), "Casual Acknowledgment");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED, MAGNITUDE), "Respectful Deference");
+        ATTITUDE_LABELS.put(Arrays.asList(FAVORED), "Passive Compliance");
+        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, FEAR, MAGNITUDE), "Petrified Horror");
+        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, FEAR), "Quiet Dread");
+        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, MAGNITUDE), "Vulnerable Insecurity");
+        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT), "Awkward Discomfort");
+        ATTITUDE_LABELS.put(Arrays.asList(FEAR, MAGNITUDE), "Terrified");
+        ATTITUDE_LABELS.put(Arrays.asList(FEAR), "Fearful");
+        ATTITUDE_LABELS.put(Arrays.asList(MAGNITUDE), "Profound Resignation");
+        ATTITUDE_LABELS.put(new ArrayList<>(), "Empty Indifference");
     }
 
-    public Attitude(boolean _interested, boolean _favored, boolean _confident, boolean _fear, boolean _magnitude) {
-        this.interested = _interested;
-        this.favored = _favored;
-        this.confident = _confident;
-        this.fear = _fear;
-        this.magnitude = _magnitude;
+    public Attitude(boolean interested, boolean favored, boolean confident, boolean fear, boolean magnitude) {
+        this.activeComponents = new ArrayList<>();
+        if (interested) activeComponents.add(INTERESTED);
+        if (favored) activeComponents.add(FAVORED);
+        if (confident) activeComponents.add(CONFIDENT);
+        if (fear) activeComponents.add(FEAR);
+        if (magnitude) activeComponents.add(MAGNITUDE);
     }
 
-    public Attitude(int bitCode) {
-        this.interested = (bitCode & INTEREST_MASK) != 0;
-        this.favored = (bitCode & FAVOR_MASK) != 0;
-        this.confident = (bitCode & CONFIDENCE_MASK) != 0;
-        this.fear = (bitCode & FEAR_MASK) != 0;
-        this.magnitude = (bitCode & MAGNITUDE_MASK) != 0;
+    public Attitude(List<Component> components) {
+        this.activeComponents = new ArrayList<>(components);
     }
 
-    public int getAttitudeCode() {
-        int interestBit = interested ? 1 : 0;
-        int favorBit = favored ? 1 : 0;
-        int confidenceBit = confident ? 1 : 0;
-        int fearBit = fear ? 1 : 0;
-        int magnitudeBit = magnitude ? 1 : 0;
-        return (interestBit << 4) | (favorBit << 3) | (confidenceBit << 2) | (fearBit << 1) | magnitudeBit;
+    public List<Component> getActiveComponents() {
+        return new ArrayList<>(activeComponents);
     }
 
-    public boolean isInterested() { return interested; }
-    public boolean isFavored() { return favored; }
-    public boolean isConfident() { return confident; }
-    public boolean isFearful() { return fear; }
-    public boolean isMagnitude() { return magnitude; }
+    public boolean isInterested() { return activeComponents.contains(INTERESTED); }
+    public boolean isFavored() { return activeComponents.contains(FAVORED); }
+    public boolean isConfident() { return activeComponents.contains(CONFIDENT); }
+    public boolean isFearful() { return activeComponents.contains(FEAR); }
+    public boolean isMagnitude() { return activeComponents.contains(MAGNITUDE); }
 
-    public void setInterested(boolean _interested) { this.interested = _interested; }
-    public void setFavored(boolean _favored) { this.favored = _favored; }
-    public void setConfident(boolean _confident) { this.confident = _confident; }
-    public void setFearful(boolean _fear) { this.fear = _fear; }
-    public void setMagnitude(boolean _magnitude) { this.magnitude = _magnitude; }
+    public void setInterested(boolean interested) { updateComponent(INTERESTED, interested); }
+    public void setFavored(boolean favored) { updateComponent(FAVORED, favored); }
+    public void setConfident(boolean confident) { updateComponent(CONFIDENT, confident); }
+    public void setFearful(boolean fear) { updateComponent(FEAR, fear); }
+    public void setMagnitude(boolean magnitude) { updateComponent(MAGNITUDE, magnitude); }
 
-    public String getAttitudeLabel() {
-        return ATTITUDE_LABELS.getOrDefault(getAttitudeCode(), "error");
+    private void updateComponent(Component component, boolean active) {
+        if (active && !activeComponents.contains(component)) {
+            activeComponents.add(component);
+        } else if (!active && activeComponents.contains(component)) {
+            activeComponents.remove(component);
+        }
+    }
+
+    public String getLabel() { // Renamed from getAttitudeLabel()
+        return ATTITUDE_LABELS.getOrDefault(activeComponents, "error");
     }
 
     public String print() {
-        String interestColor = interested ? LIGHT_GREEN : DARK_RED;
-        String favorColor = favored ? LIGHT_GREEN : DARK_RED;
-        String confidenceColor = confident ? LIGHT_GREEN : DARK_RED;
-        String fearColor = fear ? LIGHT_GREEN : DARK_RED;
-        String magnitudeColor = magnitude ? LIGHT_GREEN : DARK_RED;
-
-        return String.format(
-                "Attitude: %s (Interest: %s%s%s, Favor: %s%s%s, Confidence: %s%s%s, Fear: %s%s%s, Magnitude: %s%s%s)",
-                getAttitudeLabel(),
-                interestColor, interested, RESET_COLOR,
-                favorColor, favored, RESET_COLOR,
-                confidenceColor, confident, RESET_COLOR,
-                fearColor, fear, RESET_COLOR,
-                magnitudeColor, magnitude, RESET_COLOR
-        );
+        StringBuilder sb = new StringBuilder("Attitude: ").append(getLabel()).append(" (");
+        for (int i = 0; i < ALL_COMPONENTS.length; i++) {
+            Component component = ALL_COMPONENTS[i];
+            String color = activeComponents.contains(component) ? LIGHT_GREEN : DARK_RED;
+            sb.append(component.getLabel()).append(": ").append(color).append(activeComponents.contains(component)).append(RESET_COLOR);
+            if (i < ALL_COMPONENTS.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "Attitude: %s (Interest: %s, Favor: %s, Confidence: %s, Fear: %s, Magnitude: %s)",
-                getAttitudeLabel(),
-                interested,
-                favored,
-                confident,
-                fear,
-                magnitude
-        );
+        return String.format("Attitude: %s (Components: %s)", getLabel(), activeComponents);
     }
 
     public static void main(String[] args) {
@@ -133,15 +116,31 @@ public class Attitude {
         int sample_count = 4;
 
         for (int i = 0; i < sample_count; i++) {
-            int bit_code = rng.nextInt(32);
-            String binaryBitCode = String.format("%5s", Integer.toBinaryString(bit_code)).replace(' ', '0');
-            System.out.println("Generated bit_code: " + binaryBitCode + " (" + bit_code + ")");
+            int numComponents = rng.nextInt(ALL_COMPONENTS.length + 1);
+            List<Component> randomComponents = new ArrayList<>();
+            List<Component> availableComponents = new ArrayList<>(Arrays.asList(ALL_COMPONENTS));
+            for (int j = 0; j < numComponents; j++) {
+                int randomIndex = rng.nextInt(availableComponents.size());
+                randomComponents.add(availableComponents.remove(randomIndex));
+            }
 
-            Attitude attitude = new Attitude(bit_code);
+            Attitude attitude = new Attitude(randomComponents);
+            System.out.println("Generated components: " + attitude.getActiveComponents());
             System.out.println(attitude.print());
             System.out.println("  (Evaluated: " + attitude + ")");
-            System.out.println("  Code: " + attitude.getAttitudeCode());
             System.out.println();
         }
+
+        Attitude fearConfidence = new Attitude(Arrays.asList(FEAR, CONFIDENT));
+        System.out.println("Fear then Confidence: " + fearConfidence);
+        System.out.println("  Label: " + fearConfidence.getLabel());
+
+        Attitude confidenceFear = new Attitude(Arrays.asList(CONFIDENT, FEAR));
+        System.out.println("Confidence then Fear: " + confidenceFear);
+        System.out.println("  Label: " + confidenceFear.getLabel());
+
+        Attitude enthusiastic = new Attitude(Arrays.asList(INTERESTED, FAVORED, CONFIDENT, FEAR, MAGNITUDE));
+        System.out.println("Enthusiastic: " + enthusiastic);
+        System.out.println("  Label: " + enthusiastic.getLabel());
     }
 }
