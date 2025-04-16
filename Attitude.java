@@ -22,38 +22,38 @@ public class Attitude {
     private static final Map<Integer, String> ATTITUDE_LABELS = new HashMap<>();
 
     static {
-        ATTITUDE_LABELS.put(0b11111, "Overwhelmingly Excited Acceptance");   // I+ F+ C+ Fe+ M+
-        ATTITUDE_LABELS.put(0b11110, "Excited Acceptance");                // I+ F+ C+ Fe+ M-
-        ATTITUDE_LABELS.put(0b11101, "Intensely Hopeful Confidence");      // I+ F+ C- Fe+ M+
-        ATTITUDE_LABELS.put(0b11100, "Hopeful Confidence");                // I+ F+ C- Fe+ M-
-        ATTITUDE_LABELS.put(0b11011, "Deeply Curious Approval");           // I+ F+ C+ Fe- M+
-        ATTITUDE_LABELS.put(0b11010, "Curious Approval");                  // I+ F+ C+ Fe- M-
-        ATTITUDE_LABELS.put(0b11001, "Profoundly Confident Liking");       // I+ F+ C- Fe- M+
-        ATTITUDE_LABELS.put(0b11000, "Confident Liking");                // I+ F+ C- Fe- M-
-        ATTITUDE_LABELS.put(0b10111, "Terrified Interest");                // I+ F- C+ Fe+ M+
-        ATTITUDE_LABELS.put(0b10110, "Fearful Interest");                  // I+ F- C+ Fe+ M-
-        ATTITUDE_LABELS.put(0b10101, "Extremely Apprehensive Uncertainty");// I+ F- C- Fe+ M+
-        ATTITUDE_LABELS.put(0b10100, "Apprehensive Uncertainty");          // I+ F- C- Fe+ M-
-        ATTITUDE_LABELS.put(0b10011, "Intensely Cautious Curiosity");      // I+ F- C+ Fe- M+
-        ATTITUDE_LABELS.put(0b10010, "Cautious Curiosity");                // I+ F- C+ Fe- M-
-        ATTITUDE_LABELS.put(0b10001, "Utterly Dreadful Uncertainty");      // I+ F- C- Fe- M+
-        ATTITUDE_LABELS.put(0b10000, "Dreadful Uncertainty");              // I+ F- C- Fe- M-
-        ATTITUDE_LABELS.put(0b01111, "Strongly Reluctant Agreement");      // I- F+ C+ Fe+ M+
-        ATTITUDE_LABELS.put(0b01110, "Reluctant Agreement");               // I- F+ C+ Fe+ M-
-        ATTITUDE_LABELS.put(0b01101, "Very Tolerant Confidence");         // I- F+ C- Fe+ M+
-        ATTITUDE_LABELS.put(0b01100, "Tolerant Confidence");               // I- F+ C- Fe+ M-
-        ATTITUDE_LABELS.put(0b01011, "Quite Hesitant Curiosity");          // I- F+ C+ Fe- M+
-        ATTITUDE_LABELS.put(0b01010, "Hesitant Curiosity");                // I- F+ C+ Fe- M-
-        ATTITUDE_LABELS.put(0b01001, "Performative Scripted Approval");    // I- F+ C- Fe- M+
-        ATTITUDE_LABELS.put(0b01000, "Uncertain Approval");                // I- F+ C- Fe- M-
-        ATTITUDE_LABELS.put(0b00111, "Completely Paralyzing Fear");       // I- F- C+ Fe+ M+
-        ATTITUDE_LABELS.put(0b00110, "Paralyzing Fear");                   // I- F- C+ Fe- M-
-        ATTITUDE_LABELS.put(0b00101, "Severely Nervous Insecurity");       // I- F- C- Fe+ M+
-        ATTITUDE_LABELS.put(0b00100, "Nervous Insecurity");                // I- F- C- Fe+ M-
-        ATTITUDE_LABELS.put(0b00011, "Terrified");                         // I- F- C+ Fe+ M+
-        ATTITUDE_LABELS.put(0b00010, "Fearful");                           // I- F- C+ Fe- M-
-        ATTITUDE_LABELS.put(0b00001, "Profound Apathetic Resignation");    // I- F- C- Fe- M+
-        ATTITUDE_LABELS.put(0b00000, "Apathetic Resignation");             // I- F- C- Fe- M-
+        ATTITUDE_LABELS.put(0b11111, "Passionate Enthusiasm");
+        ATTITUDE_LABELS.put(0b11110, "Eager Excitement");
+        ATTITUDE_LABELS.put(0b11101, "Emboldened Optimism");
+        ATTITUDE_LABELS.put(0b11100, "Lighthearted Hopefulness");
+        ATTITUDE_LABELS.put(0b11011, "Fascinated Admiration");
+        ATTITUDE_LABELS.put(0b11010, "Curious Attraction");
+        ATTITUDE_LABELS.put(0b11001, "Devoted Affection");
+        ATTITUDE_LABELS.put(0b11000, "Comfortable Contentment");
+        ATTITUDE_LABELS.put(0b10111, "Intense Observance");
+        ATTITUDE_LABELS.put(0b10110, "Cautious Interest");
+        ATTITUDE_LABELS.put(0b10101, "Anxious Anticipation");
+        ATTITUDE_LABELS.put(0b10100, "Mild Worry");
+        ATTITUDE_LABELS.put(0b10011, "Investigative Suspicion");
+        ATTITUDE_LABELS.put(0b10010, "Guarded Skepticism");
+        ATTITUDE_LABELS.put(0b10001, "Profound Unease");
+        ATTITUDE_LABELS.put(0b10000, "Quiet Concern");
+        ATTITUDE_LABELS.put(0b01111, "Reluctant Acceptance");
+        ATTITUDE_LABELS.put(0b01110, "Diplomatic Tolerance");
+        ATTITUDE_LABELS.put(0b01101, "Cautious Optimism");
+        ATTITUDE_LABELS.put(0b01100, "Modest Satisfaction");
+        ATTITUDE_LABELS.put(0b01011, "Polite Interest");
+        ATTITUDE_LABELS.put(0b01010, "Casual Acknowledgment");
+        ATTITUDE_LABELS.put(0b01001, "Respectful Deference");
+        ATTITUDE_LABELS.put(0b01000, "Passive Compliance");
+        ATTITUDE_LABELS.put(0b00111, "Petrified Horror");
+        ATTITUDE_LABELS.put(0b00110, "Quiet Dread");
+        ATTITUDE_LABELS.put(0b00101, "Vulnerable Insecurity");
+        ATTITUDE_LABELS.put(0b00100, "Awkward Discomfort");
+        ATTITUDE_LABELS.put(0b00011, "Terrified");
+        ATTITUDE_LABELS.put(0b00010, "Fearful");
+        ATTITUDE_LABELS.put(0b00001, "Profound Resignation");
+        ATTITUDE_LABELS.put(0b00000, "Empty Indifference");
     }
 
     public Attitude(boolean _interested, boolean _favored, boolean _confident, boolean _fear, boolean _magnitude) {
