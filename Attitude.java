@@ -1,4 +1,3 @@
-// Package declaration (assuming you kept org.anglewyrm.labodoom)
 package org.anglewyrm.labodoom;
 
 import java.util.Map;
@@ -6,201 +5,126 @@ import java.util.HashMap;
 import java.util.Random;
 import static org.anglewyrm.labodoom.ColorConstants.*;
 
-/**
- * Represents a single attitude based on four boolean bits:
- * Interest, Favor, Confidence, and Fear.
- */
 public class Attitude {
 
-    private boolean interested;  // like
-    private boolean favored;     // agree
-    private boolean confident;   // sure
-    private boolean fear;        // scary
+    private boolean interested;
+    private boolean favored;
+    private boolean confident;
+    private boolean fear;
+    private boolean magnitude;
 
-    private static final int INTEREST_MASK = 0b1000; // Check the 4th bit
-    private static final int FAVOR_MASK = 0b0100;    // Check the 3rd bit
-    private static final int CONFIDENCE_MASK = 0b0010; // Check the 2nd bit
-    private static final int FEAR_MASK = 0b0001;     // Check the 1st bit
+    private static final int INTEREST_MASK = 0b10000;
+    private static final int FAVOR_MASK = 0b01000;
+    private static final int CONFIDENCE_MASK = 0b00100;
+    private static final int FEAR_MASK = 0b00010;
+    private static final int MAGNITUDE_MASK = 0b00001;
 
     private static final Map<Integer, String> ATTITUDE_LABELS = new HashMap<>();
 
     static {
-        // You'll need to define 16 labels here based on the 4 boolean states
-        ATTITUDE_LABELS.put(0b1111, "Excited Acceptance");
-        ATTITUDE_LABELS.put(0b1110, "Hopeful Confidence");
-        ATTITUDE_LABELS.put(0b1101, "Curious Approval");
-        ATTITUDE_LABELS.put(0b1100, "Confident Liking");
-        ATTITUDE_LABELS.put(0b1011, "Fearful Interest");
-        ATTITUDE_LABELS.put(0b1010, "Apprehensive Uncertainty");
-        ATTITUDE_LABELS.put(0b1001, "Cautious Curiosity");
-        ATTITUDE_LABELS.put(0b1000, "Dreadful Uncertainty");
-        ATTITUDE_LABELS.put(0b0111, "Reluctant Agreement");
-        ATTITUDE_LABELS.put(0b0110, "Tolerant Confidence");
-        ATTITUDE_LABELS.put(0b0101, "Hesitant Curiosity");
-        ATTITUDE_LABELS.put(0b0100, "Uncertain Approval");
-        ATTITUDE_LABELS.put(0b0011, "Paralyzing Fear");
-        ATTITUDE_LABELS.put(0b0010, "Nervous Insecurity");
-        ATTITUDE_LABELS.put(0b0001, "Pure Fear");
-        ATTITUDE_LABELS.put(0b0000, "Apathetic Resignation");
+        ATTITUDE_LABELS.put(0b11111, "Overwhelmingly Excited Acceptance");   // I+ F+ C+ Fe+ M+
+        ATTITUDE_LABELS.put(0b11110, "Excited Acceptance");                // I+ F+ C+ Fe+ M-
+        ATTITUDE_LABELS.put(0b11101, "Intensely Hopeful Confidence");      // I+ F+ C- Fe+ M+
+        ATTITUDE_LABELS.put(0b11100, "Hopeful Confidence");                // I+ F+ C- Fe+ M-
+        ATTITUDE_LABELS.put(0b11011, "Deeply Curious Approval");           // I+ F+ C+ Fe- M+
+        ATTITUDE_LABELS.put(0b11010, "Curious Approval");                  // I+ F+ C+ Fe- M-
+        ATTITUDE_LABELS.put(0b11001, "Profoundly Confident Liking");       // I+ F+ C- Fe- M+
+        ATTITUDE_LABELS.put(0b11000, "Confident Liking");                // I+ F+ C- Fe- M-
+        ATTITUDE_LABELS.put(0b10111, "Terrified Interest");                // I+ F- C+ Fe+ M+
+        ATTITUDE_LABELS.put(0b10110, "Fearful Interest");                  // I+ F- C+ Fe+ M-
+        ATTITUDE_LABELS.put(0b10101, "Extremely Apprehensive Uncertainty");// I+ F- C- Fe+ M+
+        ATTITUDE_LABELS.put(0b10100, "Apprehensive Uncertainty");          // I+ F- C- Fe+ M-
+        ATTITUDE_LABELS.put(0b10011, "Intensely Cautious Curiosity");      // I+ F- C+ Fe- M+
+        ATTITUDE_LABELS.put(0b10010, "Cautious Curiosity");                // I+ F- C+ Fe- M-
+        ATTITUDE_LABELS.put(0b10001, "Utterly Dreadful Uncertainty");      // I+ F- C- Fe- M+
+        ATTITUDE_LABELS.put(0b10000, "Dreadful Uncertainty");              // I+ F- C- Fe- M-
+        ATTITUDE_LABELS.put(0b01111, "Strongly Reluctant Agreement");      // I- F+ C+ Fe+ M+
+        ATTITUDE_LABELS.put(0b01110, "Reluctant Agreement");               // I- F+ C+ Fe+ M-
+        ATTITUDE_LABELS.put(0b01101, "Very Tolerant Confidence");         // I- F+ C- Fe+ M+
+        ATTITUDE_LABELS.put(0b01100, "Tolerant Confidence");               // I- F+ C- Fe+ M-
+        ATTITUDE_LABELS.put(0b01011, "Quite Hesitant Curiosity");          // I- F+ C+ Fe- M+
+        ATTITUDE_LABELS.put(0b01010, "Hesitant Curiosity");                // I- F+ C+ Fe- M-
+        ATTITUDE_LABELS.put(0b01001, "Performative Scripted Approval");    // I- F+ C- Fe- M+
+        ATTITUDE_LABELS.put(0b01000, "Uncertain Approval");                // I- F+ C- Fe- M-
+        ATTITUDE_LABELS.put(0b00111, "Completely Paralyzing Fear");       // I- F- C+ Fe+ M+
+        ATTITUDE_LABELS.put(0b00110, "Paralyzing Fear");                   // I- F- C+ Fe- M-
+        ATTITUDE_LABELS.put(0b00101, "Severely Nervous Insecurity");       // I- F- C- Fe+ M+
+        ATTITUDE_LABELS.put(0b00100, "Nervous Insecurity");                // I- F- C- Fe+ M-
+        ATTITUDE_LABELS.put(0b00011, "Terrified");                         // I- F- C+ Fe+ M+
+        ATTITUDE_LABELS.put(0b00010, "Fearful");                           // I- F- C+ Fe- M-
+        ATTITUDE_LABELS.put(0b00001, "Profound Apathetic Resignation");    // I- F- C- Fe- M+
+        ATTITUDE_LABELS.put(0b00000, "Apathetic Resignation");             // I- F- C- Fe- M-
     }
 
-    /**
-     * Constructor to initialize the Attitude with four individual boolean values.
-     *
-     * @param _interested   True if Interested, False if Not_interested.
-     * @param _favored      True for Yay, False for Nay (Favor).
-     * @param _confident    True if Sure, False if Not_sure (Confidence).
-     * @param _fear         True if Fearful, False if Not_fearful.
-     */
-    public Attitude(boolean _interested, boolean _favored, boolean _confident, boolean _fear) {
+    public Attitude(boolean _interested, boolean _favored, boolean _confident, boolean _fear, boolean _magnitude) {
         this.interested = _interested;
         this.favored = _favored;
         this.confident = _confident;
         this.fear = _fear;
+        this.magnitude = _magnitude;
     }
 
-    /**
-     * Constructor to initialize the Attitude from a 4-bit integer code.
-     *
-     * @param bitCode An integer representing the 4-bit attitude (0-15).
-     */
     public Attitude(int bitCode) {
         this.interested = (bitCode & INTEREST_MASK) != 0;
         this.favored = (bitCode & FAVOR_MASK) != 0;
         this.confident = (bitCode & CONFIDENCE_MASK) != 0;
         this.fear = (bitCode & FEAR_MASK) != 0;
+        this.magnitude = (bitCode & MAGNITUDE_MASK) != 0;
     }
 
-    /**
-     * Gets the 4-bit integer representation of the attitude.
-     *
-     * @return The 4-bit attitude code.
-     */
     public int getAttitudeCode() {
         int interestBit = interested ? 1 : 0;
         int favorBit = favored ? 1 : 0;
         int confidenceBit = confident ? 1 : 0;
         int fearBit = fear ? 1 : 0;
-        return (interestBit << 3) | (favorBit << 2) | (confidenceBit << 1) | fearBit;
+        int magnitudeBit = magnitude ? 1 : 0;
+        return (interestBit << 4) | (favorBit << 3) | (confidenceBit << 2) | (fearBit << 1) | magnitudeBit;
     }
 
-    /**
-     * Gets the Interest state.
-     *
-     * @return True if Interested, False if Not_interested.
-     */
-    public boolean isInterested() {
-        return interested;
-    }
+    public boolean isInterested() { return interested; }
+    public boolean isFavored() { return favored; }
+    public boolean isConfident() { return confident; }
+    public boolean isFearful() { return fear; }
+    public boolean isMagnitude() { return magnitude; }
 
-    /**
-     * Gets the Favor state.
-     *
-     * @return True if Favored, False if Not_favored.
-     */
-    public boolean isFavored() {
-        return favored;
-    }
+    public void setInterested(boolean _interested) { this.interested = _interested; }
+    public void setFavored(boolean _favored) { this.favored = _favored; }
+    public void setConfident(boolean _confident) { this.confident = _confident; }
+    public void setFearful(boolean _fear) { this.fear = _fear; }
+    public void setMagnitude(boolean _magnitude) { this.magnitude = _magnitude; }
 
-    /**
-     * Gets the Confidence state.
-     *
-     * @return True if Confident, False if Not_confident.
-     */
-    public boolean isConfident() {
-        return confident;
-    }
-
-    /**
-     * Gets the Fear state.
-     *
-     * @return True if Fearful, False if Not_fearful.
-     */
-    public boolean isFearful() {
-        return fear;
-    }
-
-    /**
-     * Sets the Interest state.
-     *
-     * @param _interested The new Interest state (true or false).
-     */
-    public void setInterested(boolean _interested) {
-        this.interested = _interested;
-    }
-
-    /**
-     * Sets the Favor state.
-     *
-     * @param _favored The new Favor state (true or false).
-     */
-    public void setFavored(boolean _favored) {
-        this.favored = _favored;
-    }
-
-    /**
-     * Sets the Confidence state.
-     *
-     * @param _confident The new Confidence state (true or false).
-     */
-    public void setConfident(boolean _confident) {
-        this.confident = _confident;
-    }
-
-    /**
-     * Sets the Fear state.
-     *
-     * @param _fear The new Fear state (true or false).
-     */
-    public void setFearful(boolean _fear) {
-        this.fear = _fear;
-    }
-
-    /**
-     * Gets a textual representation of the current attitude.
-     *
-     * @return A String representing the emotional attitude.
-     */
     public String getAttitudeLabel() {
         return ATTITUDE_LABELS.getOrDefault(getAttitudeCode(), "error");
     }
 
-    /**
-     * Returns a colorized formatted string representing the interest, favor, confidence, and fear levels.
-     * Green (light) for true, Red (dark) for false.
-     *
-     * @return A colorized String.
-     */
     public String print() {
         String interestColor = interested ? LIGHT_GREEN : DARK_RED;
         String favorColor = favored ? LIGHT_GREEN : DARK_RED;
         String confidenceColor = confident ? LIGHT_GREEN : DARK_RED;
-        String fearColor = fear ? LIGHT_GREEN : DARK_RED; // You might want a different color for fear
+        String fearColor = fear ? LIGHT_GREEN : DARK_RED;
+        String magnitudeColor = magnitude ? LIGHT_GREEN : DARK_RED;
 
         return String.format(
-                "Attitude: %s (Interest: %s%s%s, Favor: %s%s%s, Confidence: %s%s%s, Fear: %s%s%s)",
+                "Attitude: %s (Interest: %s%s%s, Favor: %s%s%s, Confidence: %s%s%s, Fear: %s%s%s, Magnitude: %s%s%s)",
                 getAttitudeLabel(),
                 interestColor, interested, RESET_COLOR,
                 favorColor, favored, RESET_COLOR,
                 confidenceColor, confident, RESET_COLOR,
-                fearColor, fear, RESET_COLOR
+                fearColor, fear, RESET_COLOR,
+                magnitudeColor, magnitude, RESET_COLOR
         );
     }
 
-    /**
-     * Overrides the toString() method to return a textual representation of the attitude.
-     *
-     * @return A String representing the attitude and its boolean states.
-     */
     @Override
     public String toString() {
         return String.format(
-                "Attitude: %s (Interest: %s, Favor: %s, Confidence: %s, Fear: %s)",
+                "Attitude: %s (Interest: %s, Favor: %s, Confidence: %s, Fear: %s, Magnitude: %s)",
                 getAttitudeLabel(),
                 interested,
                 favored,
                 confident,
-                fear
+                fear,
+                magnitude
         );
     }
 
@@ -209,13 +133,13 @@ public class Attitude {
         int sample_count = 4;
 
         for (int i = 0; i < sample_count; i++) {
-            int bit_code = rng.nextInt(16); // Generate a random integer from 0 to 15
-            String binaryBitCode = String.format("%4s", Integer.toBinaryString(bit_code)).replace(' ', '0');
+            int bit_code = rng.nextInt(32);
+            String binaryBitCode = String.format("%5s", Integer.toBinaryString(bit_code)).replace(' ', '0');
             System.out.println("Generated bit_code: " + binaryBitCode + " (" + bit_code + ")");
 
-            Attitude attitude = new Attitude(bit_code); // Create Attitude directly from bit_code
-            System.out.println(attitude.print()); // Use print() for colorized output
-            System.out.println("  (Evaluated: " + attitude + ")"); // toString() for text composition
+            Attitude attitude = new Attitude(bit_code);
+            System.out.println(attitude.print());
+            System.out.println("  (Evaluated: " + attitude + ")");
             System.out.println("  Code: " + attitude.getAttitudeCode());
             System.out.println();
         }
