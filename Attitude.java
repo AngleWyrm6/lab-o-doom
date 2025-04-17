@@ -12,52 +12,52 @@ import static org.anglewyrm.labodoom.Constants.Component.*;
 public class Attitude {
 
     private List<Component> activeComponents;
-    private static final Component[] ALL_COMPONENTS = {INTERESTED, LIKE, CONFIDENT, FEAR, EXCITED}; // Updated
+    private static final Component[] ALL_COMPONENTS = {INTERESTED, LIKE, SURE, FEAR, EXCITED};
 
     private static final Map<List<Component>, String> ATTITUDE_LABELS = new HashMap<>();
 
     static {
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, CONFIDENT, FEAR, EXCITED), "Passionate Enthusiasm"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, CONFIDENT, FEAR), "Eager Excitement");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, CONFIDENT, EXCITED), "Emboldened Optimism"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, CONFIDENT), "Lighthearted Hopefulness");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, FEAR, EXCITED), "Fascinated Admiration"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, SURE, FEAR, EXCITED), "Passionate Enthusiasm");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, SURE, FEAR), "Eager Excitement");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, SURE, EXCITED), "Emboldened Optimism");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, SURE), "Lighthearted Hopefulness");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, FEAR, EXCITED), "Fascinated Admiration");
         ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, FEAR), "Curious Attraction");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, EXCITED), "Devoted Affection"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE, EXCITED), "Devoted Affection");
         ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, LIKE), "Comfortable Contentment");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, FEAR, EXCITED), "Intense Observance"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, FEAR), "Cautious Interest");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT, EXCITED), "Anxious Anticipation"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, CONFIDENT), "Mild Worry");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FEAR, EXCITED), "Investigative Suspicion"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, SURE, FEAR, EXCITED), "Intense Observance");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, SURE, FEAR), "Cautious Interest");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, SURE, EXCITED), "Anxious Anticipation");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, SURE), "Mild Worry");
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FEAR, EXCITED), "Investigative Suspicion");
         ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, FEAR), "Guarded Skepticism");
-        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, EXCITED), "Profound Unease"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(INTERESTED, EXCITED), "Profound Unease");
         ATTITUDE_LABELS.put(Arrays.asList(INTERESTED), "Quiet Concern");
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, CONFIDENT, FEAR, EXCITED), "Reluctant Acceptance"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, CONFIDENT, FEAR), "Diplomatic Tolerance");
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, CONFIDENT, EXCITED), "Cautious Optimism"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, CONFIDENT), "Modest Satisfaction");
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, FEAR, EXCITED), "Polite Interest"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, SURE, FEAR, EXCITED), "Reluctant Acceptance");
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, SURE, FEAR), "Diplomatic Tolerance");
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, SURE, EXCITED), "Cautious Optimism");
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, SURE), "Modest Satisfaction");
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, FEAR, EXCITED), "Polite Interest");
         ATTITUDE_LABELS.put(Arrays.asList(LIKE, FEAR), "Casual Acknowledgment");
-        ATTITUDE_LABELS.put(Arrays.asList(LIKE, EXCITED), "Respectful Deference"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(LIKE, EXCITED), "Respectful Deference");
         ATTITUDE_LABELS.put(Arrays.asList(LIKE), "Passive Compliance");
-        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, FEAR, EXCITED), "Petrified Horror"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, FEAR), "Quiet Dread");
-        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT, EXCITED), "Vulnerable Insecurity"); // Updated
-        ATTITUDE_LABELS.put(Arrays.asList(CONFIDENT), "Awkward Discomfort");
-        ATTITUDE_LABELS.put(Arrays.asList(FEAR, EXCITED), "Pain"); // Re-interpreting (fear, excited) as pain
+        ATTITUDE_LABELS.put(Arrays.asList(SURE, FEAR, EXCITED), "Petrified Horror");
+        ATTITUDE_LABELS.put(Arrays.asList(SURE, FEAR), "Quiet Dread");
+        ATTITUDE_LABELS.put(Arrays.asList(SURE, EXCITED), "Vulnerable Insecurity");
+        ATTITUDE_LABELS.put(Arrays.asList(SURE), "Awkward Discomfort");
+        ATTITUDE_LABELS.put(Arrays.asList(FEAR, EXCITED), "Pain");
         ATTITUDE_LABELS.put(Arrays.asList(FEAR), "Fearful");
-        ATTITUDE_LABELS.put(Arrays.asList(EXCITED), "Profound Resignation"); // Updated
+        ATTITUDE_LABELS.put(Arrays.asList(EXCITED), "Restless");
         ATTITUDE_LABELS.put(new ArrayList<>(), "Empty Indifference");
     }
 
-    public Attitude(boolean interested, boolean like, boolean confident, boolean fear, boolean excited) { // Updated
+    public Attitude(boolean interested, boolean like, boolean sure, boolean fear, boolean excited) {
         this.activeComponents = new ArrayList<>();
         if (interested) activeComponents.add(INTERESTED);
         if (like) activeComponents.add(LIKE);
-        if (confident) activeComponents.add(CONFIDENT);
+        if (sure) activeComponents.add(SURE);
         if (fear) activeComponents.add(FEAR);
-        if (excited) activeComponents.add(EXCITED); // Updated
+        if (excited) activeComponents.add(EXCITED);
     }
 
     public Attitude(List<Component> components) {
@@ -76,16 +76,16 @@ public class Attitude {
         return activeComponents.contains(LIKE);
     }
 
-    public boolean isConfident() {
-        return activeComponents.contains(CONFIDENT);
+    public boolean isSure() {
+        return activeComponents.contains(SURE);
     }
 
     public boolean isFearful() {
         return activeComponents.contains(FEAR);
     }
 
-    public boolean isExcited() { // Updated getter
-        return activeComponents.contains(EXCITED); // Updated
+    public boolean isExcited() {
+        return activeComponents.contains(EXCITED);
     }
 
     public void setInterested(boolean interested) {
@@ -96,16 +96,16 @@ public class Attitude {
         updateComponent(LIKE, like);
     }
 
-    public void setConfident(boolean confident) {
-        updateComponent(CONFIDENT, confident);
+    public void setSure(boolean sure) {
+        updateComponent(SURE, sure);
     }
 
     public void setFearful(boolean fear) {
         updateComponent(FEAR, fear);
     }
 
-    public void setExcited(boolean excited) { // Updated setter
-        updateComponent(EXCITED, excited); // Updated
+    public void setExcited(boolean excited) {
+        updateComponent(EXCITED, excited);
     }
 
     private void updateComponent(Component component, boolean active) {
@@ -139,6 +139,20 @@ public class Attitude {
         return String.format("Attitude: %s (Components: %s)", getLabel(), activeComponents);
     }
 
+    // New converse method
+    public static Attitude converse(Attitude subject, Attitude object) {
+        List<Component> resultComponents = new ArrayList<>();
+        // Perform XOR operation on the components
+        for (Component component : ALL_COMPONENTS) {
+            boolean subjectHasComponent = subject.getActiveComponents().contains(component);
+            boolean objectHasComponent = object.getActiveComponents().contains(component);
+            if (subjectHasComponent ^ objectHasComponent) { // XOR
+                resultComponents.add(component);
+            }
+        }
+        return new Attitude(resultComponents);
+    }
+
     public static void main(String[] args) {
         Random rng = new Random();
         int sample_count = 4;
@@ -167,11 +181,22 @@ public class Attitude {
         System.out.println("Like then Excited: " + likeExcited);
         System.out.println("  Label: " + likeExcited.getLabel());
 
-        Attitude enthusiastic = new Attitude(Arrays.asList(INTERESTED, LIKE, CONFIDENT, FEAR, EXCITED));
+        Attitude enthusiastic = new Attitude(Arrays.asList(INTERESTED, LIKE, SURE, FEAR, EXCITED));
         System.out.println("Enthusiastic: " + enthusiastic);
         System.out.println("  Label: " + enthusiastic.getLabel());
 
         printAttitudeLengthHistogram();
+
+        // Test the converse method
+        Attitude a = new Attitude(true, true, false, false, true); // Interested, Like, Excited
+        Attitude b = new Attitude(false, true, true, true, false); // Like, Sure, Fear
+        Attitude c = Attitude.converse(a, b);
+        System.out.println("\n--- Converse Test ---");
+        System.out.println("A: " + a + " Label: " + a.getLabel());
+        System.out.println("B: " + b + " Label: " + b.getLabel());
+        System.out.println("C (A XOR B): " + c + " Label: " + c.getLabel()); //  Fear, Interested, Sure
+        System.out.println("---------------------");
+
     }
 
     public static void printAttitudeLengthHistogram() {
