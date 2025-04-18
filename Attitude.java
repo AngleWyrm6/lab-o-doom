@@ -68,52 +68,18 @@ public class Attitude {
         return new ArrayList<>(activeComponents);
     }
 
-    public boolean isInterested() {
-        return activeComponents.contains(INTERESTED);
+    public boolean isPresent(Component component) {
+        return activeComponents.contains(component);
     }
 
-    public boolean isLike() {
-        return activeComponents.contains(LIKE);
-    }
-
-    public boolean isSure() {
-        return activeComponents.contains(SURE);
-    }
-
-    public boolean isFearful() {
-        return activeComponents.contains(FEAR);
-    }
-
-    public boolean isExcited() {
-        return activeComponents.contains(EXCITED);
-    }
-
-    public void setInterested(boolean interested) {
-        updateComponent(INTERESTED, interested);
-    }
-
-    public void setLike(boolean like) {
-        updateComponent(LIKE, like);
-    }
-
-    public void setSure(boolean sure) {
-        updateComponent(SURE, sure);
-    }
-
-    public void setFearful(boolean fear) {
-        updateComponent(FEAR, fear);
-    }
-
-    public void setExcited(boolean excited) {
-        updateComponent(EXCITED, excited);
-    }
-
-    private void updateComponent(Component component, boolean active) {
-        if (active && !activeComponents.contains(component)) {
+    public void insert(Component component) {
+        if (!activeComponents.contains(component)) {
             activeComponents.add(component);
-        } else if (!active && activeComponents.contains(component)) {
-            activeComponents.remove(component);
         }
+    }
+
+    public void remove(Component component) {
+        activeComponents.remove(component);
     }
 
     public String getLabel() {
@@ -139,14 +105,12 @@ public class Attitude {
         return String.format("Attitude: %s (Components: %s)", getLabel(), activeComponents);
     }
 
-    // New converse method
-    public static Attitude converse(Attitude subject, Attitude object) {
+    // New compare method
+    public static Attitude compare(Attitude a, Attitude b) {
         List<Component> resultComponents = new ArrayList<>();
-        // Perform XOR operation on the components
         for (Component component : ALL_COMPONENTS) {
-            boolean subjectHasComponent = subject.getActiveComponents().contains(component);
-            boolean objectHasComponent = object.getActiveComponents().contains(component);
-            if (subjectHasComponent ^ objectHasComponent) { // XOR
+            // OR operation: If the component is in either attitude, include it
+            if (a.isPresent(component) || b.isPresent(component)) {
                 resultComponents.add(component);
             }
         }
@@ -159,7 +123,6 @@ public class Attitude {
 
         for (int i = 0; i < sample_count; i++) {
             int numComponents = rng.nextInt(ALL_COMPONENTS.length + 1);
-            List<Component> randomComponents = new ArrayList<>();
             List<Component> availableComponents = new ArrayList<>(Arrays.asList(ALL_COMPONENTS));
             for (int j = 0; j < numComponents; j++) {
                 int randomIndex = rng.nextInt(availableComponents.size());
@@ -187,15 +150,36 @@ public class Attitude {
 
         printAttitudeLengthHistogram();
 
-        // Test the converse method
+        // Test the compare method
         Attitude a = new Attitude(true, true, false, false, true); // Interested, Like, Excited
         Attitude b = new Attitude(false, true, true, true, false); // Like, Sure, Fear
-        Attitude c = Attitude.converse(a, b);
-        System.out.println("\n--- Converse Test ---");
+        Attitude c = Attitude.compare(a, b);
+        System.out.println("\n--- Compare Test (OR Combination) ---");
         System.out.println("A: " + a + " Label: " + a.getLabel());
         System.out.println("B: " + b + " Label: " + b.getLabel());
-        System.out.println("C (A XOR B): " + c + " Label: " + c.getLabel()); //  Fear, Interested, Sure
-        System.out.println("---------------------");
+        System.out.println("C (A OR B): " + c + " Label: " + c.getLabel());
+        System.out.println("---------------------------------------");
+
+        //Demonstrate insert and remove
+        Attitude d = new Attitude(false, false, false, false, false);
+        System.out.println("\n--- insert and remove Test ---");
+        System.out.println("Initial d: " + d + " Label: " + d.getLabel());
+        d.insert(INTERESTED);
+        d.insert(EXCITED);
+        System.out.println("d after inserting Interested and Excited: " + d + " Label: " + d.getLabel());
+        if (d.isPresent(INTERESTED)) {
+            System.out.println("d is Interested");
+        } else {
+            System.out.println("d is not Interested");
+        }
+        d.remove(INTERESTED);
+        System.out.println("d after removing Interested: " + d + " Label: " + d.getLabel());
+        if (d.isPresent(INTERESTED)) {
+            System.out.println("d is Interested");
+        } else {
+            System.out.println("d is not Interested");
+        }
+        System.out.println("------------------------------------------");
 
     }
 
