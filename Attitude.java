@@ -18,24 +18,7 @@ public class Attitude {
     private static final Map<Map<Component, Boolean>, String> ATTITUDE_LABELS = new HashMap<>();
 
     static {
-        // You'll need to define these labels to account for the NOT state
-        // This is just a placeholder - you'll need to map all the new combinations
-        Map<Component, Boolean> passionateEnthusiasm = new HashMap<>();
-        passionateEnthusiasm.put(INTERESTED, true);
-        passionateEnthusiasm.put(LIKE, true);
-        passionateEnthusiasm.put(SURE, true);
-        passionateEnthusiasm.put(FEAR, true);
-        passionateEnthusiasm.put(INTENSITY, true);
-        ATTITUDE_LABELS.put(passionateEnthusiasm, "Passionate Enthusiasm");
-
-        Map<Component, Boolean> notInterested = new HashMap<>();
-        notInterested.put(INTERESTED, false);
-        notInterested.put(LIKE, true);
-        notInterested.put(SURE, true);
-        notInterested.put(FEAR, true);
-        notInterested.put(INTENSITY, true);
-        ATTITUDE_LABELS.put(notInterested, "Disinterested Enthusiasm"); // Example label
-        // ... and so on for all 2^5 = 32 combinations
+        // ... (rest of your static initialization for ATTITUDE_LABELS)
     }
 
     public Attitude(Map<Component, Boolean> componentStates) {
@@ -103,7 +86,7 @@ public class Attitude {
         for (Component component : ALL_COMPONENTS) {
             boolean presentInA = a.componentStates.getOrDefault(component, false);
             boolean presentInB = b.componentStates.getOrDefault(component, false);
-            resultStates.put(component, presentInA || presentInB);
+            resultStates.put(component, inA || inB);
         }
         return new Attitude(resultStates);
     }
@@ -129,13 +112,7 @@ public class Attitude {
     }
 
     public static Attitude differenceFrom(Attitude a, Attitude b) {
-        Map<Component, Boolean> resultStates = new HashMap<>();
-        for (Component component : ALL_COMPONENTS) {
-            boolean inA = a.componentStates.getOrDefault(component, false);
-            boolean inB = b.componentStates.getOrDefault(component, false);
-            resultStates.put(component, inA && !inB);
-        }
-        return new Attitude(resultStates);
+        return xor(a, b); // Use xor()
     }
 
     public static Attitude if_(Attitude a, Attitude b) {
@@ -159,6 +136,14 @@ public class Attitude {
         return not(orResult);
     }
 
+    public static Attitude derivative(Attitude a, Attitude b) {
+        return xor(a, b); // Use xor()
+    }
+
+    public static Attitude integral(Attitude a, Attitude d) { // d is the "derivative"
+        return xor(a, d); // Use xor()
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -177,53 +162,23 @@ public class Attitude {
     }
 
     public static void main(String[] args) {
-        // Example usage with the new representation
+        // Example usage with derivative and integral
         Attitude a = new Attitude(true, true, false, false, true);
+        Attitude b = new Attitude(false, true, true, true, true);
+        Attitude d = Attitude.derivative(a, b); // d is the change from a to b
+
         System.out.println("A: " + a);
-        System.out.println("A Label: " + a.getLabel());
-
-        Attitude notA = Attitude.not(a);
-        System.out.println("NOT A: " + notA);
-        System.out.println("NOT A Label: " + notA.getLabel()); // You'll need to define this label
-
-        Attitude b = new Attitude(false, true, true, true, false);
         System.out.println("B: " + b);
-        System.out.println("B Label: " + b.getLabel());
+        System.out.println("Derivative (A to B): " + d);
 
-        Attitude orAB = Attitude.or(a, b);
-        System.out.println("A OR B: " + orAB);
-        System.out.println("A OR B Label: " + orAB.getLabel()); // You'll need to define this label
+        Attitude reconstructedB = Attitude.integral(a, d); // Applying the change to a
+        System.out.println("Integral (A + Derivative): " + reconstructedB);
 
-        Attitude andAB = Attitude.and(a, b);
-        System.out.println("A AND B: " + andAB);
-        System.out.println("A AND B Label: " + andAB.getLabel());
+        System.out.println("Reconstructed B equals B: " + reconstructedB.equals(b)); // Should be true
 
-        Attitude xorAB = Attitude.xor(a, b);
-        System.out.println("A XOR B: " + xorAB);
-        System.out.println("A XOR B Label: " + xorAB.getLabel());
-
+        // Example Usage of differenceFrom
         Attitude diffAB = Attitude.differenceFrom(a, b);
         System.out.println("A differenceFrom B: " + diffAB);
-        System.out.println("A differenceFrom B Label: " + diffAB.getLabel());
-
-        Attitude ifAB = Attitude.if_(a,b);
-        System.out.println("A if B: " + ifAB);
-        System.out.println("A if B Label: " + ifAB.getLabel());
-
-        Attitude eqAB = Attitude.equivalent(a,b);
-        System.out.println("A equivalent B: " + eqAB);
-        System.out.println("A equivalent B Label: " + eqAB.getLabel());
-
-        Attitude nandAB = Attitude.nand(a,b);
-        System.out.println("A nand B: " + nandAB);
-        System.out.println("A nand B Label: " + nandAB.getLabel());
-
-        Attitude norAB = Attitude.nor(a,b);
-        System.out.println("A nor B: " + norAB);
-        System.out.println("A nor B Label: " + norAB.getLabel());
-
-        System.out.println("a.equals(b): " + a.equals(b));
-        System.out.println("a.equals(a): " + a.equals(a));
 
     }
 }
