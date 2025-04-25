@@ -11,6 +11,25 @@ import static org.anglewyrm.labodoom.ColorConstants.*;
 import static org.anglewyrm.labodoom.Constants.Component.*;
 
 public class Attitude {
+    /* Attitude class
+     * FAQ:
+     * certainty/confidence is represented by {SURE}, {SURE,INTENSITY}
+     * attitudes are a tiered jewel:
+     * Tier-1: the simple 1-bit states, such as LIKE or FEAR
+     * Tier-2: 2-bit composite states, such as {FEAR, INTENSITY}=pain
+     * Tier-3: 3-bit composite sttaes, such as {LIKE, INTERESTED, INTENSITY}=love, etc.
+     * attitudes are thus collections rather than individual states
+     *
+     * Only Boolean and Integer values are used
+     * there are no floats (Reals)
+     * any such aggregation is a meta-task outside the scope of the class
+     *
+     * integral()/derivative() operations:
+     * For those with a math background, these functions bring to mind usages in calculus,
+     * or more specifically a Boolean calculus. For those without such training,
+     * differenceFrom() serves as a form of subtraction that highlights it's inherent first-person perspective.
+     * a - b ≠ b - a
+     */
 
     private Map<Component, Boolean> componentStates;
     private static final Component[] ALL_COMPONENTS = {INTERESTED, LIKE, SURE, FEAR, INTENSITY};
@@ -86,7 +105,7 @@ public class Attitude {
         for (Component component : ALL_COMPONENTS) {
             boolean presentInA = a.componentStates.getOrDefault(component, false);
             boolean presentInB = b.componentStates.getOrDefault(component, false);
-            resultStates.put(component, inA || inB);
+            resultStates.put(component, presentInA || presentInB);
         }
         return new Attitude(resultStates);
     }
