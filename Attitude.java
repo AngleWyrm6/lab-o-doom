@@ -139,12 +139,6 @@ public class Attitude {
         return or(notA, b);
     }
 
-    public static Attitude equivalent(Attitude a, Attitude b) {
-        Attitude aImpliesB = if_(a, b);
-        Attitude bImpliesA = if_(b, a);
-        return and(aImpliesB, bImpliesA);
-    }
-
     public static Attitude nand(Attitude a, Attitude b) {
         Attitude andResult = and(a, b);
         return not(andResult);
