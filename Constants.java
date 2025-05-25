@@ -6,7 +6,7 @@ public class Constants {
         FAVORED("Favor"),
         CONFIDENT("Confidence"),
         FEAR("Fear"),
-        MAGNITUDE("Magnitude");
+        INTENSE("Intensity");
 
         private final String label;
 
