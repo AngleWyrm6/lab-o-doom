@@ -61,9 +61,9 @@ public class Attitude {
         return componentStates.containsKey(component) && componentStates.get(component);
     }
 
-    public boolean isNotPresent(Component component) {
-        return componentStates.containsKey(component) && !componentStates.get(component);
-    }
+public boolean isNotPresent(Component component) {
+    return !componentStates.containsKey(component) || !componentStates.getOrDefault(component, false);
+}
 
     public void set(Component component, boolean present) {
         componentStates.put(component, present);
